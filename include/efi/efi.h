@@ -68,9 +68,9 @@ typedef struct EFI_RUNTIME_SERVICES EFI_RUNTIME_SERVICES;
 typedef struct EFI_CONFIGURATION_TABLE EFI_CONFIGURATION_TABLE;
 
 /**
- * Structure Typedefs: UEFI Specification 2.10 Section 7
+ * Structure Typedefs: UEFI Specification 2.10 Section 9
  */
-// typedef EFI_HII_PACKAGE_LIST_HEADER *EFI_HII_PACKAGE_LIST_PROTOCOL;
+typedef struct EFI_LOADED_IMAGE_PROTOCOL EFI_LOADED_IMAGE_PROTOCOL;
 
 /**
  * Structure Typedefs: UEFI Specification 2.10 Section 12
@@ -79,6 +79,16 @@ typedef struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL EFI_SIMPLE_TEXT_INPUT_EX_PROTOC
 typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
 // typedef struct EFI_SIMPLE_TEXT_OUTPUT_EX_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_EX_PROTOCOL;
 typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+
+/**
+ * Structure Typedefs: UEFI Specification 2.10 Section 13
+ */
+typedef struct EFI_LOAD_FILE_PROTOCOL EFI_LOAD_FILE_PROTOCOL;
+typedef struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
+typedef struct EFI_FILE_PROTOCOL EFI_FILE_PROTOCOL;
+typedef struct EFI_FILE_INFO EFI_FILE_INFO;
+typedef struct EFI_FILE_SYSTEM_INFO EFI_FILE_SYSTEM_INFO;
+typedef struct EFI_FILE_SYSTEM_VOLUME_LABEL EFI_FILE_SYSTEM_VOLUME_LABEL;
 
 /**
  * GUID: UEFI Specification 2.10 Appendix A
@@ -511,7 +521,7 @@ typedef EFI_STATUS (EFI_API *EFI_IMAGE_START) (
 );
 
 /**
- * EFI_IMAGE_UNLOAD: UEFI Specification 2.10 Section 7.4.3
+ * EFI_IMAGE_UNLOAD: UEFI Specification 2.10 Section 7.4.3 / 9.1.2
  */
 typedef EFI_STATUS (EFI_API *EFI_IMAGE_UNLOAD) (
     IN EFI_HANDLE   ImageHandle
@@ -944,6 +954,159 @@ typedef EFI_STATUS (EFI_API *EFI_TEXT_ENABLE_CURSOR) (
 );
 
 /**
+ * EFI_LOAD_FILE_PROTOCOL: UEFI Specification 2.10 Section 13.1.1
+ */
+typedef EFI_STATUS (EFI_API *EFI_LOAD_FILE) (
+    IN EFI_LOAD_FILE_PROTOCOL   *This,
+    IN EFI_DEVICE_PATH_PROTOCOL *FilePath,
+    IN BOOLEAN                  BootPolicy,
+    IN OUT UINTN                *BufferSize,
+    IN VOID                     *Buffer OPTIONAL
+);
+
+/**
+ * EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME: UEFI Specification 2.10 Section 13.4.2
+ */
+typedef EFI_STATUS (EFI_API *EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME) (
+    IN EFI_SIMPLE_FILE_SYSTEM_PROTOCOL  *This,
+    OUT EFI_FILE_PROTOCOL               **Root
+);
+
+/**
+ * EFI_FILE_OPEN: UEFI Specification 2.10 Section 13.5.2
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_OPEN) (
+    IN EFI_FILE_PROTOCOL    *This,
+    OUT EFI_FILE_PROTOCOL   **NewHandle,
+    IN CHAR16               *FileName,
+    IN UINT64               OpenMode,
+    IN UINT64               Attributes
+);
+
+/**
+ * EFI_FILE_CLOSE: UEFI Specification 2.10 Section 13.5.3
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_CLOSE) (
+    IN EFI_FILE_PROTOCOL    *This
+);
+
+/**
+ * EFI_FILE_DELETE: UEFI Specification 2.10 Section 13.5.4
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_DELETE) (
+    IN EFI_FILE_PROTOCOL    *This
+);
+
+/**
+ * EFI_FILE_READ: UEFI Specification 2.10 Section 13.5.5
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_READ) (
+    IN EFI_FILE_PROTOCOL    *This,
+    IN OUT UINTN            *BufferSize,
+    OUT VOID                *Buffer
+);
+
+/**
+ * EFI_FILE_WRITE: UEFI Specification 2.10 Section 13.5.6
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_WRITE) (
+    IN EFI_FILE_PROTOCOL    *This,
+    IN OUT UINTN            *BufferSize,
+    IN VOID                 *Buffer
+);
+
+/**
+ * EFI_FILE_IO_TOKEN: UEFI Specification 2.10 Section 13.5.7
+ */
+typedef struct {
+    EFI_EVENT   Event;
+    EFI_STATUS  Status;
+    UINTN       BufferSize;
+    VOID        *Buffer;
+} EFI_FILE_IO_TOKEN;
+
+/**
+ * EFI_FILE_OPEN_EX: UEFI Specification 2.10 Section 13.5.7
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_OPEN_EX) (
+    IN EFI_FILE_PROTOCOL        *This,
+    OUT EFI_FILE_PROTOCOL       **NewHandle,
+    IN CHAR16                   *FileName,
+    IN UINT64                   OpenMode,
+    IN UINT64                   Attributes,
+    IN OUT EFI_FILE_IO_TOKEN    *Token
+);
+
+/**
+ * EFI_FILE_READ_EX: UEFI Specification 2.10 Section 13.5.8
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_READ_EX) (
+    IN EFI_FILE_PROTOCOL        *This,
+    IN OUT EFI_FILE_IO_TOKEN    *Token
+);
+
+/**
+ * EFI_FILE_WRITE_EX: UEFI Specification 2.10 Section 13.5.9
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_WRITE_EX) (
+    IN EFI_FILE_PROTOCOL        *This,
+    IN OUT EFI_FILE_IO_TOKEN    *Token
+);
+
+/**
+ * EFI_FILE_FLUSH_EX: UEFI Specification 2.10 Section 13.5.10
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_FLUSH_EX) (
+    IN EFI_FILE_PROTOCOL        *This,
+    IN OUT EFI_FILE_IO_TOKEN    *Token
+);
+
+/**
+ * EFI_FILE_SET_POSITION: UEFI Specification 2.10 Section 13.5.11
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_SET_POSITION) (
+    IN EFI_FILE_PROTOCOL    *This,
+    IN UINT64               Position
+);
+
+/**
+ * EFI_FILE_GET_POSITION: UEFI Specification 2.10 Section 13.5.12
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_GET_POSITION) (
+    IN EFI_FILE_PROTOCOL                *This,
+    OUT UINT64                          *Position
+);
+
+/**
+ * EFI_FILE_GET_INFO: UEFI Specification 2.10 Section 13.5.13
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_GET_INFO) (
+    IN EFI_FILE_PROTOCOL    *This,
+    IN EFI_GUID             *InformationType,
+    IN OUT UINTN            *BufferSize,
+    OUT VOID                *Buffer
+);
+
+/**
+ * EFI_FILE_SET_INFO: UEFI Specification 2.10 Section 13.5.14
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_SET_INFO) (
+    IN EFI_FILE_PROTOCOL                *This,
+    IN EFI_GUID                         *InformationType,
+    IN UINTN                            BufferSize,
+    IN VOID                             *Buffer
+);
+
+/**
+ * EFI_FILE_FLUSH: UEFI Specification 2.10 Section 13.5.15
+ */
+typedef EFI_STATUS (EFI_API *EFI_FILE_FLUSH) (
+    IN EFI_FILE_PROTOCOL    *This
+);
+
+
+
+/**
  * EFI_TABLE_HEADER: UEFI Specification 2.10 Section 4.2.1
  */
 struct EFI_TABLE_HEADER {
@@ -976,7 +1139,7 @@ struct EFI_SYSTEM_TABLE {
 /**
  * EFI_BOOT_SERVICES: UEFI Specification 2.10 Section 4.4.1
  */
-struct EFI_BOOT_SERVICES{
+struct EFI_BOOT_SERVICES {
     EFI_TABLE_HEADER Header;
 
     EFI_RAISE_TPL       RaiseTPL;
@@ -1070,10 +1233,29 @@ struct EFI_CONFIGURATION_TABLE {
     VOID        *VendorTable;
 };
 
+struct EFI_LOADED_IMAGE_PROTOCOL{
+    UINT32              Revision;
+    EFI_HANDLE          ParentHandle;
+    EFI_SYSTEM_TABLE    *SystemTable;
+
+    EFI_HANDLE                  DeviceHandle;
+    EFI_DEVICE_PATH_PROTOCOL    *FilePath;
+    VOID                        *Reserved;
+
+    UINT32  LoadOptionsSize;
+    VOID    *LoadOptions;
+
+    VOID                *ImageBase;
+    UINT64              ImageSize;
+    EFI_MEMORY_TYPE     ImageCodeType;
+    EFI_MEMORY_TYPE     ImageDataType;
+    EFI_IMAGE_UNLOAD    Unload;
+};
+
 /**
  * EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL: UEFI Specification 2.10 Section 12.2.1
  */
-struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL{
+struct EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL {
     EFI_INPUT_RESET_EX              Reset;
     EFI_INPUT_READ_KEY_EX           ReadKeyStrokeEx;
     EFI_EVENT                       WaitForKeyEx;
@@ -1119,6 +1301,75 @@ struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
     EFI_SIMPLE_TEXT_OUTPUT_MODE         *Mode;
 };
 
+/**
+ * EFI_LOAD_FILE_PROTOCOL: UEFI Specification 2.10 Section 13.1.1
+ */
+struct EFI_LOAD_FILE_PROTOCOL {
+    EFI_LOAD_FILE   LoadFile;
+};
+
+/**
+ * EFI_SIMPLE_FILE_SYSTEM_PROTOCOL: UEFI Specification 2.10 Section 13.4.1
+ */
+struct EFI_SIMPLE_FILE_SYSTEM_PROTOCOL {
+    UINT64                                      Revision;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_OPEN_VOLUME OpenVolume;
+};
+
+/**
+ * EFI_FILE_PROTOCOL: UEFI Specification 2.10 Section 13.5.1
+ */
+struct EFI_FILE_PROTOCOL {
+    UINT64                  Revision;
+    EFI_FILE_OPEN           Open;
+    EFI_FILE_CLOSE          Close;
+    EFI_FILE_DELETE         Delete;
+    EFI_FILE_READ           Read;
+    EFI_FILE_WRITE          Write;
+    EFI_FILE_GET_POSITION   GetPosition;
+    EFI_FILE_SET_POSITION   SetPosition;
+    EFI_FILE_GET_INFO       GetInfo;
+    EFI_FILE_SET_INFO       SetInfo;
+    EFI_FILE_FLUSH          Flush;
+    EFI_FILE_OPEN_EX        OpenEx;
+    EFI_FILE_READ_EX        ReadEx;
+    EFI_FILE_WRITE_EX       WriteEx;
+    EFI_FILE_FLUSH_EX       FlushEx;
+};
+
+/**
+ * EFI_FILE_INFO: UEFI Specification 2.10 Section 13.5.16
+ */
+struct EFI_FILE_INFO {
+    UINT64      Size;
+    UINT64      FileSize;
+    UINT64      PhysicalSize;
+    EFI_TIME    CreateTime;
+    EFI_TIME    LastAccessTime;
+    EFI_TIME    ModificationTime;
+    UINT64      Attribute;
+    CHAR16      FileName [];
+};
+
+/**
+ * EFI_FILE_SYSTEM_INFO: UEFI Specification 2.10 Section 13.5.17
+ */
+struct EFI_FILE_SYSTEM_INFO {
+    UINT64  Size;
+    BOOLEAN ReadOnly;
+    UINT64  VolumeSize;
+    UINT64  FreeSpace;
+    UINT32  BlockSize;
+    CHAR16  VolumeLabel [];
+};
+
+/**
+ * EFI_FILE_SYSTEM_VOLUME_LABEL: UEFI Specification 2.10 Section 13.5.18
+ */
+struct EFI_FILE_SYSTEM_VOLUME_LABEL {
+    // CHAR16  VolumeLabel [];
+    CHAR16  VolumeLabel [1];
+};
 
 /**
  * Common Type Enumerations: UEFI Specification 2.10 Section 2.3.1
@@ -1136,6 +1387,18 @@ enum {
     TPL_CALLBACK = 8,
     TPL_NOTIFY = 16,
     TPL_HIGH_LEVEL = 31,
+};
+
+/**
+ * EFI_OPEN_PROTOCOL: UEFI Specification 2.10 Section 7.3.9
+ */
+enum {
+    EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL = 0x00000001,
+    EFI_OPEN_PROTOCOL_GET_PROTOCOL = 0x00000002,
+    EFI_OPEN_PROTOCOL_TEST_PROTOCOL = 0x00000004,
+    EFI_OPEN_PROTOCOL_BY_CHILD_CONTROLLER = 0x00000008,
+    EFI_OPEN_PROTOCOL_BY_DRIVER = 0x00000010,
+    EFI_OPEN_PROTOCOL_EXCLUSIVE = 0x00000020
 };
 
 /**
@@ -1218,3 +1481,31 @@ enum {
  * EFI_TEXT_ATTRIBUTE: UEFI Specification 2.10 Section 12.4.7
  */
 #define EFI_TEXT_ATTRIBUTE(Foreground,Background) ((Foreground) | ((Background) << 4))
+
+/**
+ * EFI_FILE_OPEN_MODE: UEFI Specification 2.10 Section 12.5.2
+ */
+#define EFI_FILE_MODE_READ       0x0000000000000001UL
+#define EFI_FILE_MODE_WRITE      0x0000000000000002UL
+#define EFI_FILE_MODE_CREATE     0x8000000000000000UL
+/**
+ * EFI_FILE_ATTRIBUTE: UEFI Specification 2.10 Section 12.5.2
+ */
+#define EFI_FILE_READ_ONLY       0x0000000000000001
+#define EFI_FILE_HIDDEN          0x0000000000000002
+#define EFI_FILE_SYSTEM          0x0000000000000004
+#define EFI_FILE_RESERVED        0x0000000000000008
+#define EFI_FILE_DIRECTORY       0x0000000000000010
+#define EFI_FILE_ARCHIVE         0x0000000000000020
+#define EFI_FILE_VALID_ATTR      0x0000000000000037
+
+/**
+ * EFI_LOADED_IMAGE_PROTOCOL_GUID: UEFI Specification 2.10 Section 9.1.1
+ */
+static const EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID = { 0x5B1B31A1, 0x9562, 0x11d2, 0x8E, 0x3F, { 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B } };
+
+/**
+ * EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID: UEFI Specification 2.10 Section 13.4.1
+ */
+static const EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID = { 0x0964e5b22, 0x6459, 0x11d2, 0x8e, 0x39, { 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b } };
+
