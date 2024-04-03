@@ -55,7 +55,6 @@ typedef UINTN   EFI_TPL;
 #define IN
 #define OUT
 #define OPTIONAL
-#define CONST const
 #define EFI_API __attribute__((ms_abi))
 
 /**
@@ -135,8 +134,8 @@ typedef EFI_STATUS (EFI_API *EFI_CREATE_EVENT_EX) (
     IN UINT32           Type,
     IN EFI_TPL          NotifyTpl,
     IN EFI_EVENT_NOTIFY NotifyFunction OPTIONAL,
-    IN CONST VOID       *NotifyContext OPTIONAL,
-    IN CONST EFI_GUID   *EventGroup OPTIONAL,
+    IN VOID             *NotifyContext OPTIONAL,
+    IN EFI_GUID         *EventGroup OPTIONAL,
     OUT EFI_EVENT       *Event
 );
 
@@ -1560,10 +1559,14 @@ enum {
 /**
  * EFI_LOADED_IMAGE_PROTOCOL_GUID: UEFI Specification 2.10 Section 9.1.1
  */
-static const EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID = { 0x5B1B31A1, 0x9562, 0x11d2, 0x8E, 0x3F, { 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B } };
+static EFI_GUID EFI_LOADED_IMAGE_PROTOCOL_GUID = { 0x5B1B31A1, 0x9562, 0x11d2, 0x8E, 0x3F, { 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B } };
 
+/**
+ * EFI_DEVICE_PATH_PROTOCOL_GUID: UEFI Specification 2.10 Section 10.2
+ */
+static EFI_GUID EFI_DEVICE_PATH_PROTOCOL_GUID = { 0x09576e91, 0x6d3f, 0x11d2, 0x8e, 0x39, { 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b } };
 /**
  * EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID: UEFI Specification 2.10 Section 13.4.1
  */
-static const EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID = { 0x0964e5b22, 0x6459, 0x11d2, 0x8e, 0x39, { 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b } };
+static EFI_GUID EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID = { 0x0964e5b22, 0x6459, 0x11d2, 0x8e, 0x39, { 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b } };
 
