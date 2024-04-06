@@ -125,13 +125,6 @@ typedef EFI_STATUS (EFI_API *EFI_CREATE_EVENT) (
     OUT EFI_EVENT       *Event
 );
 
-#define EVT_TIMER                            0x80000000
-#define EVT_RUNTIME                          0x40000000
-#define EVT_NOTIFY_WAIT                      0x00000100
-#define EVT_NOTIFY_SIGNAL                    0x00000200
-#define EVT_SIGNAL_EXIT_BOOT_SERVICES        0x00000201
-#define EVT_SIGNAL_VIRTUAL_ADDRESS_CHANGE    0x60000202
-
 /**
  * EFI_CREATE_EVENT_EX: UEFI Specification 2.10 Section 7.1.2
  */
@@ -1407,6 +1400,15 @@ enum {
     FALSE = 0,
     TRUE = 1
 };
+/**
+ * EFI_EVENT: UEFI Specification 2.10 Section 7.1.1
+ */
+#define EFI_EVENT_TIMER                         0x80000000
+#define EFI_EVENT_RUNTIME                       0x40000000
+#define EFI_EVENT_NOTIFY_WAIT                   0x00000100
+#define EFI_EVENT_NOTIFY_SIGNAL                 0x00000200
+#define EFI_EVENT_SIGNAL_EXIT_BOOT_SERVICES     0x00000201
+#define EFI_EVENT_SIGNAL_VIRTUAL_ADDRESS_CHANGE 0x60000202
 
 /**
  * EFI_TPL Enumeration: UEFI Specification 2.10 Section 7.1.8
