@@ -58,6 +58,11 @@ typedef UINTN   EFI_TPL;
 #define EFI_API __attribute__((ms_abi))
 
 /**
+ * Structure Typedefs: UEFI Specification 2.10 Section 3
+ */
+typedef struct EFI_LOAD_OPTION EFI_LOAD_OPTION;
+
+/**
  * Structure Typedefs: UEFI Specification 2.10 Section 4
  */
 typedef struct EFI_TABLE_HEADER EFI_TABLE_HEADER;
@@ -1104,7 +1109,31 @@ typedef EFI_STATUS (EFI_API *EFI_FILE_FLUSH) (
     IN EFI_FILE_PROTOCOL    *This
 );
 
+/**
+ * EFI_LOAD_OPTION: UEFI Specification 2.10 Section 3.1.3
+ */
+struct EFI_LOAD_OPTION {
+  UINT32                            Attributes;
+  UINT16                            FilePathListLength;
+  // CHAR16                         Description[];
+  // EFI_DEVICE_PATH_PROTOCOL       FilePathList[];
+  // UINT8                          OptionalData[];
+};
 
+/**
+ * EFI_EXPANDED_LOAD_OPTION: Custom
+ */
+typedef struct {
+    UINTN LoadOptionLength;
+    UINTN DescriptionLength;
+    UINTN FilePathListLength;
+    UINTN OptionalDataLength;
+
+    EFI_LOAD_OPTION *LoadOption;
+    CHAR16 *Description;
+    EFI_DEVICE_PATH_PROTOCOL *FilePathList;
+    UINT8 *OptionalData;
+} EFI_EXPANDED_LOAD_OPTION;
 
 /**
  * EFI_TABLE_HEADER: UEFI Specification 2.10 Section 4.2.1
@@ -1555,6 +1584,11 @@ enum {
     EFI_WARN_FILE_SYSTEM = 6,
     EFI_WARN_RESET_REQUIRED = 7,
 };
+
+/**
+ * EFI_GLOBAL_VARIABLE_GUID: UEFI Specification 2.10 Section 3.3
+ */
+static EFI_GUID EFI_GLOBAL_VARIABLE_GUID = { 0x8BE4DF61, 0x93CA, 0x11d2, 0xAA, 0x0D, { 0x00, 0xE0, 0x98, 0x03, 0x2B, 0x8C } };
 
 /**
  * EFI_LOADED_IMAGE_PROTOCOL_GUID: UEFI Specification 2.10 Section 9.1.1
