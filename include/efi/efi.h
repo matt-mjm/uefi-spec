@@ -1105,7 +1105,7 @@ typedef EFI_STATUS (EFI_API *EFI_FILE_FLUSH) (
 /**
  * EFI_LOAD_OPTION: UEFI Specification 2.10 Section 3.1.3
  */
-struct EFI_LOAD_OPTION {
+struct __attribute__((__packed__)) EFI_LOAD_OPTION {
   UINT32                            Attributes;
   UINT16                            FilePathListLength;
   // CHAR16                         Description[];
