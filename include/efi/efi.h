@@ -1119,12 +1119,12 @@ struct __attribute__((__packed__)) EFI_LOAD_OPTION {
 typedef struct {
     UINTN LoadOptionLength;
     UINTN DescriptionLength;
-    UINTN FilePathListLength;
+    UINTN FilePathLength;
     UINTN OptionalDataLength;
 
     EFI_LOAD_OPTION *LoadOption;
     CHAR16 *Description;
-    EFI_DEVICE_PATH_PROTOCOL *FilePathList;
+    EFI_DEVICE_PATH_PROTOCOL *FilePath;
     UINT8 *OptionalData;
 } EFI_EXPANDED_LOAD_OPTION;
 
